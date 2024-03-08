@@ -1,6 +1,6 @@
 import { commulitveProbabilityGenerator } from "./commulitveProbabilityGenerator";
 
-export const simulation = (numbers: number[], timeBetweenArrivals: number[][], checkoutTime: number[][]): { table, data } => {
+export const simulation = (numbers: number[], timeBetweenArrivals: number[][], checkoutTime: number[][]): { table, outsideTableData } => {
 
     // get the biggest number in terms of digits
     let numberOfDigitsOfLongestNumber = 0;
@@ -13,51 +13,66 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
     let checkoutTimeProbabilityList = commulitveProbabilityGenerator(checkoutTime)
 
     let table = [];
-    let record;
-    // ----------- for loop
+    let outsideTableData;
+    let totalTimeCustomerWaitInQueue = 0;
+    let totalCustomersNumber = 0;
+
     for (let i = 0; i < numbers.length; i++) {
+        let record = {
+            customerNumber: 0,
+            timeBetweenArrivals: 0,
+            arrivalTime: 0,
+            waitingTimeInQueue: 0,
+            checkoutTime: 0
+        };
 
-        // --- required attributes in the object record
+        let propability = numbers[i] / (10 ** numberOfDigitsOfLongestNumber)
+        record.customerNumber = i + 1;
 
-        // divide by the suitable number
-        record.number = numbers[i] / (10 ** numberOfDigitsOfLongestNumber)
-
+        /**
+         **
+         ** required attributes in the object record
+         **
+        */
         // time between arrivals
         timeBetweenArrivalsProbabilityList.forEach((j) => {
-            j[1] < record.number ? null : record.timeBetweenArrivals = j[0]
+            if (propability > j[2]) {
+                record.timeBetweenArrivals = j[0]
+                return;
+            }
         })
 
         // arrival time
         i === 0 ? record.arrivalTime = 0 : record.timeBetweenArrivals + table[i - 1].arrivalTime
 
         // checkout time 
-        checkoutTime.forEach((j) => {
-            j[1] < record.number ? null : record.checkoutTime = j[0]
+        checkoutTimeProbabilityList.forEach((j) => {
+            if (propability > j[2]) {
+                record.checkoutTime = j[0]
+                return;
+            }
         })
 
+        // waiting time in queue
+        // i === 0 ? record.waitingTimeInQueue = 0 : record.waitingTimeInQueue = table[i - 1].checkoutTime - record.arrivalTime;
+
         // customers in queue
-        i === 0 ? record.customersInQueue = 0 : record.customersInQueue++;
-
-
         // time in system
-
         // queue length
         // server utilization
         // service time
-        // --- to be used in conclusions
 
         table.push(record)
+
+        totalTimeCustomerWaitInQueue += record.waitingTimeInQueue;
+        totalCustomersNumber++;
     }
 
-    // data outside the table
-    // 
+    /**
+     **
+     ** outside table data
+     **
+    */
 
-
-    let data;
-    // interarrival time
-    // arrival time (privious arrival time + current interarrival time)
-    // checkout time
-    // time service begins ()
-
-    return { table, data }
+    return { table, outsideTableData }
 }
