@@ -1,19 +1,15 @@
 import timeBetweenArrivalsJson from './Data/timeBetweenArrivals.json';
 import checkoutTimeJson from './Data/checkoutTime.json';
-import { exactNumberGenerator } from './Componentes/numberGenerator';
-import { commulitveProbabilityGenerator } from './Componentes/commulitveProbabilityGenerator';
+import { exactNumberGenerator, randomNumberGenerator } from './Componentes/numberGenerator';
 import { simulation } from './Componentes/simulation';
+import { formattedObjectPrint, formattedTablePrint } from './utils/formatedPrint';
 
 
-// --------- exact
-// genrate exact numbers
-let numbers = exactNumberGenerator(50)
-let { table, outsideTableData } = simulation(numbers, timeBetweenArrivalsJson, checkoutTimeJson)
-console.log(table)
-// simulation columns
-// print formated output
+let simulationNumber = 50;
+let generatedNumbers = randomNumberGenerator(simulationNumber)
+// let generatedNumbers = exactNumberGenerator(simulationNumber)
 
-// --------- random
-// genrate random numbers
-// simulation columns
-// print formated output
+let { table, outsideTableData } = simulation(generatedNumbers, timeBetweenArrivalsJson, checkoutTimeJson)
+
+formattedTablePrint(table)
+formattedObjectPrint(outsideTableData)
