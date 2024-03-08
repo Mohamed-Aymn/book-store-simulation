@@ -29,6 +29,7 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
         let propability = numbers[i] / (10 ** numberOfDigitsOfLongestNumber)
         record.customerNumber = i + 1;
 
+
         /**
          **
          ** required attributes in the object record
@@ -42,9 +43,6 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
             }
         })
 
-        // arrival time
-        i === 0 ? record.arrivalTime = 0 : record.timeBetweenArrivals + table[i - 1].arrivalTime
-
         // checkout time 
         checkoutTimeProbabilityList.forEach((j) => {
             if (propability > j[2]) {
@@ -52,6 +50,11 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
                 return;
             }
         })
+
+
+
+        // arrival time
+        // i === 0 ? record.arrivalTime = 0 : record.timeBetweenArrivals + table[i - 1].arrivalTime
 
         // waiting time in queue
         // i === 0 ? record.waitingTimeInQueue = 0 : record.waitingTimeInQueue = table[i - 1].checkoutTime - record.arrivalTime;

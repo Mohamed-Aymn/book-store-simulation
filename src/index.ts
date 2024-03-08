@@ -3,13 +3,35 @@ import checkoutTimeJson from './Data/checkoutTime.json';
 import { exactNumberGenerator, randomNumberGenerator } from './Componentes/numberGenerator';
 import { simulation } from './Componentes/simulation';
 import { formattedObjectPrint, formattedTablePrint } from './utils/formatedPrint';
+import * as readline from 'readline';
 
+(async () => {
+    let generatedNumbers;
+    let simulationNumber = 50;
 
-let simulationNumber = 50;
-let generatedNumbers = randomNumberGenerator(simulationNumber)
-// let generatedNumbers = exactNumberGenerator(simulationNumber)
+    // ask for number generation type
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+    const answer = await new Promise<string>(resolve => {
+        rl.question('type "e" for exact number generation and any key for random ones:  ', (answer) => {
+            resolve(answer.toLowerCase());
+        });
+    });
+    switch (answer) {
+        case 'e':
+            generatedNumbers = exactNumberGenerator(simulationNumber);
+            break;
+        default:
+            generatedNumbers = randomNumberGenerator(simulationNumber);
+    }
+    rl.close();
 
-let { table, outsideTableData } = simulation(generatedNumbers, timeBetweenArrivalsJson, checkoutTimeJson)
+    // simulation implementation
+    let { table, outsideTableData } = simulation(generatedNumbers, timeBetweenArrivalsJson, checkoutTimeJson);
 
-formattedTablePrint(table)
-formattedObjectPrint(outsideTableData)
+    // output
+    formattedTablePrint(table);
+    // formattedObjectPrint(outsideTableData);
+})();
