@@ -14,11 +14,20 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
 
     let table = [];
     let outsideTableData = {
-        avgTimeBetweenArrivals: 0
+        avgTimeBetweenArrivals: 0,
+        avgTimeInQueue: 0,
+        avgCheckoutTime: 0,
+        avgQueueLength: 0,
+        PropabilityOfWaiting: "",
+        PropabilityOfServerBeingIdle: ""
     };
-    let totalTimeCustomerWaitInQueue = 0;
+    let totalTimeInQueue = 0;
     let totalCustomersNumber = 0;
     let totalTimeBetweenArrivals = 0;
+    let totalCheckoutTime = 0;
+    let totalQueueLength = 0;
+    let totalWaitingCustomers = 0;
+    let totalIdleTimes = 0;
 
     for (let i = 0; i < numbers.length; i++) {
         let record = {
@@ -83,9 +92,14 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
         record.totalServiceTime = record.timeWaitInQueue + record.checkoutTime;
         table.push(record)
 
-        // totalTimeCustomerWaitInQueue += record.waitingTimeInQueue;
+        // data for data outside table
+        totalTimeInQueue = record.timeWaitInQueue;
+        totalCheckoutTime = record.checkoutTime;
+        totalQueueLength = record.queueLength;
         totalCustomersNumber++;
         totalTimeBetweenArrivals += record.timeBetweenArrivals;
+        record.timeWaitInQueue > 0 ? totalWaitingCustomers++ : null;
+        record.idleTime > 0 ? totalIdleTimes++ : null;
     }
 
     /**
@@ -94,6 +108,11 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
      **
     */
     outsideTableData.avgTimeBetweenArrivals = totalTimeBetweenArrivals / totalCustomersNumber;
+    outsideTableData.avgTimeInQueue = totalTimeInQueue / totalCustomersNumber;
+    outsideTableData.avgCheckoutTime = totalCheckoutTime / totalCheckoutTime // same as avg system time
+    outsideTableData.avgQueueLength = totalQueueLength / totalCustomersNumber
+    outsideTableData.PropabilityOfWaiting = totalWaitingCustomers / totalCustomersNumber * 100 + "%";
+    outsideTableData.PropabilityOfServerBeingIdle = totalIdleTimes / totalCustomersNumber * 100 + "%";
 
     return { table, outsideTableData }
 }
