@@ -4,7 +4,7 @@ interface Record {
 
 export const formattedTablePrint = (records: Record[]): void => {
     const headers = Object.keys(records[0]);
-    const gap = 20;
+    const gap = 15;
 
     const columnWidths: Record = {};
     for (const header of headers) {

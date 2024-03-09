@@ -33,5 +33,5 @@ import * as readline from 'readline';
 
     // output
     formattedTablePrint(table);
-    // formattedObjectPrint(outsideTableData);
+    formattedObjectPrint(outsideTableData);
 })();
