@@ -73,7 +73,7 @@ export const simulation = (numbers: number[], timeBetweenArrivals: number[][], c
             } else if (timeDifference <= 0) {
                 record.timeWaitInQueue = 0;
                 record.queueLength = 0;
-                record.idleTime = timeDifference;
+                record.idleTime = timeDifference * -1;
             }
         }
         // start time (time customer starts communicating with the counter man)
